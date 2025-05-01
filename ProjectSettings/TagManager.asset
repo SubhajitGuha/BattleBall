@@ -6,6 +6,10 @@ TagManager:
   tags:
   - AttackerSpawn
   - DefenderSpawn
+  - Ball
+  - Attacker
+  - DefenderGate
+  - DefenderFence
   layers:
   - Default
   - TransparentFX

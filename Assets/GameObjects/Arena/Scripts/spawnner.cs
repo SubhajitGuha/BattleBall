@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class spawnner : MonoBehaviour
+public class Spawnner : MonoBehaviour
 {
 
     public GameObject Attacker; //spawnnable game object "attacker"
@@ -8,7 +8,7 @@ public class spawnner : MonoBehaviour
 
     private GameObject m_attackerSpawnRegion; //defines the bounds where attacker can spawn
     private GameObject m_defenderSpawnRegion; //defines the bounds where defender can spawn
-    private float spawnYOffset = 0.5f;
+    private float spawnYOffset = 1.0f;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -25,7 +25,7 @@ public class spawnner : MonoBehaviour
         if (Physics.Raycast(ray, out hit, 100))
         {
             //spawn the attacker
-            Vector3 spawnPoint = new Vector3(hit.point.x, hit.point.y + spawnYOffset, hit.point.z);
+            Vector3 spawnPoint = new Vector3(hit.point.x, transform.position.y + spawnYOffset, hit.point.z);
             if(hit.collider.gameObject == m_attackerSpawnRegion)
             {
                 Instantiate(Attacker, spawnPoint, Quaternion.identity);
