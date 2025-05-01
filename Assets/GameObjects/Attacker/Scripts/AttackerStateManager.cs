@@ -32,7 +32,6 @@ public class AttackerStateManager : MonoBehaviour
     //private void OnTriggerEnter(Collider other)
     //{
     //    m_currentState.OnCollisionEnter(this, other);
-
     //}
 
     private void OnTriggerStay(Collider other)
@@ -40,9 +39,6 @@ public class AttackerStateManager : MonoBehaviour
         m_currentState.OnCollisionEnter(this, other);
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-    }
     public void SwitchState(AttackerBaseState state)
     {
         m_currentState=state;

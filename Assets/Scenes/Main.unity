@@ -181,7 +181,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 23
+  orthographic size: 21.98
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -444,7 +444,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 781826486537906964, guid: 7fd76837c06f81e429a9fba05803faba, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -9.5
+      value: -10
       objectReference: {fileID: 0}
     - target: {fileID: 781826486537906964, guid: 7fd76837c06f81e429a9fba05803faba, type: 3}
       propertyPath: m_LocalRotation.w
@@ -472,6 +472,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 781826486537906964, guid: 7fd76837c06f81e429a9fba05803faba, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 781826486537906964, guid: 7fd76837c06f81e429a9fba05803faba, type: 3}
+      propertyPath: m_ConstrainProportionsScale
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4303719768272821303, guid: 7fd76837c06f81e429a9fba05803faba, type: 3}
@@ -534,6 +538,10 @@ PrefabInstance:
     - target: {fileID: 2962311743856442698, guid: e30a8e6e773123946a3dad6d7bdd0e53, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4969326680328997822, guid: e30a8e6e773123946a3dad6d7bdd0e53, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8111165845637170778, guid: e30a8e6e773123946a3dad6d7bdd0e53, type: 3}
       propertyPath: m_Name

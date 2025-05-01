@@ -10,6 +10,7 @@ TagManager:
   - Attacker
   - DefenderGate
   - DefenderFence
+  - Arena
   layers:
   - Default
   - TransparentFX
