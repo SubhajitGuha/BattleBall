@@ -23,7 +23,7 @@ public class DefenderStandbyState : DefenderBaseState
             m_senseRadius * 2.0f);
     }
 
-    private AttackerStateManager getkAttackerInRadius(in DefenderStateManager fromDefender)
+    private AttackerStateManager getAttackerInRadius(in DefenderStateManager fromDefender)
     {
         var ballGameObject = GameObject.FindGameObjectWithTag("Ball"); //only one ball is there
 
@@ -33,8 +33,14 @@ public class DefenderStandbyState : DefenderBaseState
         }
 
         AttackerStateManager attackerHoldingBall = ballGameObject.transform.parent.GetComponent<AttackerStateManager>();
+        if(Vector3.Distance(attackerHoldingBall.transform.position,ballGameObject.transform.position) > 1.0)
+        {
+            //attacker might be still receiving the ball so check for that and dont chase the attacker
+            return null;
+        }
         if (Vector3.Distance(attackerHoldingBall.transform.position, fromDefender.transform.position) <= m_senseRadius)
         {
+            //check if attacker holding the ball is inside the radius or not
             return attackerHoldingBall;
         }
         return null;
@@ -42,7 +48,7 @@ public class DefenderStandbyState : DefenderBaseState
 
     public override void UpdateState(DefenderStateManager defender)
     {
-        AttackerStateManager attackerHoldingBall = getkAttackerInRadius(defender);
+        AttackerStateManager attackerHoldingBall = getAttackerInRadius(defender);
         if (attackerHoldingBall != null)
         {
             m_scanCircle.GetComponent<MeshRenderer>().enabled = false;

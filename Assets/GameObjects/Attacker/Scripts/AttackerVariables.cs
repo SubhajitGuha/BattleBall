@@ -11,6 +11,7 @@ public class AttackerVariables : MonoBehaviour
     public static float NormalSpeed = 1.5f;
     public static float CarryingSpeed = 0.75f;
     public static float BallSpeed = 1.5f;
+    public static float RunningSpeed = 20.0f;
 
     [NonSerialized] public static bool isBallOccupied = false;
 }

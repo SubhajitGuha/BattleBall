@@ -33,13 +33,18 @@ public class AttackerHoldingBallState : AttackerBaseState
         {
             //this attacker is waiting to receive the ball
             Vector3 ballMoveLocation = attacker.transform.position + attacker.transform.forward * 1.0f;
-            Vector3 dir = (attacker.transform.position - m_ball.transform.position).normalized;
-            Vector3 changeAxis = new Vector3(1.0f, 0.0f, 1.0f); //donot change the y-axis
-            m_ball.transform.position += dir.Multiply(changeAxis) * AttackerVariables.BallSpeed * Time.deltaTime;
-            m_ball.transform.forward = dir.Multiply(changeAxis);
-            if(ballToAttackerDist <= 1.0f)
+            float step = AttackerVariables.BallSpeed * Time.deltaTime;
+            m_ball.transform.position = MyUtils.TranslateOnXZPlane(
+                m_ball.transform.position,
+                attacker.transform.position,
+                step);
+
+            m_ball.transform.forward = MyUtils.GetDirectionInXZPlane(
+                m_ball.transform.position,
+                attacker.transform.position);
+            if (ballToAttackerDist <= 1.0f)
             {
-                m_ball.transform.position = ballMoveLocation;
+                m_ball.transform.position = new Vector3(ballMoveLocation.x, 0.0f, ballMoveLocation.z);
                 m_isBallClose = true;
             }
 
@@ -48,10 +53,15 @@ public class AttackerHoldingBallState : AttackerBaseState
         {
             //once the ball is received move towards the enemy gate
             Vector3 currentPos = attacker.transform.position;
-            Vector3 direction = (m_defenderGate.transform.position - currentPos).normalized;
-            Vector3 changeAxis = new Vector3(1.0f, 0.0f, 1.0f); //donot change the y-axis
-            attacker.transform.position += direction.Multiply(changeAxis) * AttackerVariables.CarryingSpeed * Time.deltaTime;
-            attacker.transform.forward = direction.Multiply(changeAxis);
+            float step = AttackerVariables.CarryingSpeed * Time.deltaTime;
+            attacker.transform.position = MyUtils.TranslateOnXZPlane(
+                currentPos,
+                m_defenderGate.transform.position,
+                step);
+
+            attacker.transform.forward = MyUtils.GetDirectionInXZPlane(
+                currentPos,
+                m_defenderGate.transform.position);
         }
     }
 

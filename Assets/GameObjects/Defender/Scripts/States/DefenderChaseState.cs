@@ -10,7 +10,7 @@ public class DefenderChaseState : DefenderBaseState
     public override void UpdateState(DefenderStateManager defender)
     {
         float step = DefenderVariables.NormalSpeed *Time.deltaTime;
-        defender.transform.position = Vector3.MoveTowards(
+        defender.transform.position = MyUtils.TranslateOnXZPlane(
             defender.transform.position,
             defender.AttackerToChase.transform.position,
             step);

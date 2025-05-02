@@ -27,10 +27,9 @@ public class AttackerChaseBallState : AttackerBaseState
         }
         //else chase to catch the ball
         Vector3 currentPos = attacker.transform.position;
-        Vector3 direction = (m_ball.transform.position - currentPos).normalized;
-        Vector3 changeAxis = new Vector3(1.0f, 0.0f, 1.0f); //donot change the y-axis
-        attacker.transform.position += direction.Multiply(changeAxis) * AttackerVariables.NormalSpeed * Time.deltaTime;
-        attacker.transform.forward = direction.Multiply(changeAxis);
+        float step = AttackerVariables.NormalSpeed * Time.deltaTime;
+        attacker.transform.position = MyUtils.TranslateOnXZPlane(currentPos, m_ball.transform.position, step);
+        attacker.transform.forward = MyUtils.GetDirectionInXZPlane(currentPos, m_ball.transform.position);
     }
 
     public override void ExitState(AttackerStateManager attacker)
@@ -46,7 +45,7 @@ public class AttackerChaseBallState : AttackerBaseState
             AttackerVariables.isBallOccupied = true;
             Vector3 ballMoveLocation = attacker.transform.position + attacker.transform.forward * 1.0f;
             m_ball.transform.SetParent(attacker.transform, true);
-            m_ball.transform.position = ballMoveLocation;
+            m_ball.transform.position = new Vector3(ballMoveLocation.x, 0.0f, ballMoveLocation.z);
             attacker.SwitchState(attacker.m_attackerHoldingBallState);
         }
     }
