@@ -13,8 +13,8 @@ public class DefenderInactiveState : DefenderBaseState
         //save the old material so that it can be switched later
         m_oldMaterial = renderer.material;
         //on Inactive state switch to the inactive material
-        if (defender.InactiveMaterial != null)
-            renderer.material = defender.InactiveMaterial;
+        if (defender.inactiveMaterial != null)
+            renderer.material = defender.inactiveMaterial;
         else
         {
             Debug.Log("Inactive Material Not Assigned To Attacker");
@@ -25,7 +25,7 @@ public class DefenderInactiveState : DefenderBaseState
     {
         m_timer += Time.deltaTime;
         //stay inactive until the timer runs out and until we reach the old position
-        if(Vector3.Distance(defender.transform.position, defender.DefenderOriginalPosition) <= 0.01f && m_timer >= defender.CurrentTimer)
+        if(Vector3.Distance(defender.transform.position, defender.defenderOriginalPosition) <= 0.01f && m_timer >= defender.currentTimer)
         {
             //switch to old material
             defender.gameObject.GetNamedChild("DefenderBody").GetComponent<Renderer>().material = m_oldMaterial;
@@ -33,7 +33,7 @@ public class DefenderInactiveState : DefenderBaseState
             return;
         }
         float step = DefenderVariables.ReturnSpeed * Time.deltaTime;
-        defender.transform.position = MyUtils.TranslateOnXZPlane(defender.transform.position, defender.DefenderOriginalPosition, step);
+        defender.transform.position = MyUtils.TranslateOnXZPlane(defender.transform.position, defender.defenderOriginalPosition, step);
     }
 
     public override void ExitState(DefenderStateManager defender)

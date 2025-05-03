@@ -3,11 +3,11 @@ using UnityEngine;
 
 public class DefenderStateManager : MonoBehaviour
 {
-    public Material InactiveMaterial;
+    public Material inactiveMaterial;
 
-    [NonSerialized] public Vector3 DefenderOriginalPosition; //this is the defender spawn position
-    [NonSerialized] public float CurrentTimer = 0.0f;
-    [NonSerialized] public GameObject AttackerToChase;
+    [NonSerialized] public Vector3 defenderOriginalPosition; //this is the defender spawn position
+    [NonSerialized] public float currentTimer = 0.0f;
+    [NonSerialized] public GameObject attackerToChase;
 
     private DefenderBaseState m_currentState;
 
@@ -18,8 +18,8 @@ public class DefenderStateManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        DefenderOriginalPosition = transform.position;
-        CurrentTimer = DefenderVariables.SpawnTime;
+        defenderOriginalPosition = transform.position;
+        currentTimer = DefenderVariables.SpawnTime;
         m_currentState = m_defenderInactiveState;
         m_currentState.EnterState(this);
     }

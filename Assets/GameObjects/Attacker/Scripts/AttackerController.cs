@@ -19,8 +19,9 @@ public class AttackerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        MazeGenerator.Graph node = MazeGenerator.MazeGraph[m_currentCoord.x, m_currentCoord.y];
-        if (Input.GetKeyDown(KeyCode.W))
+        MazeGenerator.Graph node = MazeGenerator.mazeGraph[m_currentCoord.x, m_currentCoord.y];
+        bool isGamePaused = MazeGameManager.instance.IsGamePaused();
+        if (Input.GetKeyDown(KeyCode.W) && !isGamePaused)
         {
             if(node.top != -Vector2Int.one)
             {
@@ -28,7 +29,7 @@ public class AttackerController : MonoBehaviour
                 transform.position += new Vector3(0.0f, 0.0f, 1.0f); //move one unit in top
             }
         }
-        else if (Input.GetKeyDown(KeyCode.S))
+        else if (Input.GetKeyDown(KeyCode.S) && !isGamePaused)
         {
             if (node.bottom != -Vector2Int.one)
             {
@@ -36,7 +37,7 @@ public class AttackerController : MonoBehaviour
                 transform.position += new Vector3(0.0f, 0.0f, -1.0f); //move one unit in bottom
             }
         }
-        else if (Input.GetKeyDown(KeyCode.A))
+        else if (Input.GetKeyDown(KeyCode.A) && !isGamePaused)
         {
             if (node.left != -Vector2Int.one)
             {
@@ -44,7 +45,7 @@ public class AttackerController : MonoBehaviour
                 transform.position += new Vector3(-1.0f, 0.0f, 0.0f); //move one unit in left
             }
         }
-        else if (Input.GetKeyDown(KeyCode.D))
+        else if (Input.GetKeyDown(KeyCode.D) && !isGamePaused)
         {
             if (node.right != -Vector2Int.one)
             {
@@ -55,6 +56,7 @@ public class AttackerController : MonoBehaviour
      
         if(transform.position == m_ballposition)
         {
+            MazeGameManager.instance.AttackerWins();
             Debug.Log("Maze Attacker Wins");
         }
     }

@@ -43,12 +43,12 @@ public class Spawnner : MonoBehaviour
         {
             //spawn the attacker
             Vector3 spawnPoint = new Vector3(hit.point.x, 0.0f, hit.point.z);
-            if(hit.collider.gameObject == m_attackerSpawnRegion)
+            if(hit.collider.gameObject == m_attackerSpawnRegion && GameManager.instance.CanAttackerSpawn())
             {
                 Instantiate(m_attacker, spawnPoint, Quaternion.identity);
             }
             //spawn the defender
-            if (hit.collider.gameObject == m_defenderSpawnRegion)
+            if (hit.collider.gameObject == m_defenderSpawnRegion && GameManager.instance.CanDefenderSpawn())
             {
                 Instantiate(m_defender, spawnPoint, Quaternion.identity);
             }
@@ -57,7 +57,7 @@ public class Spawnner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !GameManager.instance.IsGamePaused())
         {
            spawn();
         }

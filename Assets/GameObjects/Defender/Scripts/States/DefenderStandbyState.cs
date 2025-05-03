@@ -33,7 +33,7 @@ public class DefenderStandbyState : DefenderBaseState
         }
 
         AttackerStateManager attackerHoldingBall = ballGameObject.transform.parent.GetComponent<AttackerStateManager>();
-        if(Vector3.Distance(attackerHoldingBall.transform.position,ballGameObject.transform.position) > 1.0)
+        if(Vector3.Distance(attackerHoldingBall.transform.position,ballGameObject.transform.position) > 1.5)
         {
             //attacker might be still receiving the ball so check for that and dont chase the attacker
             return null;
@@ -52,7 +52,7 @@ public class DefenderStandbyState : DefenderBaseState
         if (attackerHoldingBall != null)
         {
             m_scanCircle.GetComponent<MeshRenderer>().enabled = false;
-            defender.AttackerToChase = attackerHoldingBall.gameObject;
+            defender.attackerToChase = attackerHoldingBall.gameObject;
             defender.SwitchState(defender.m_defenderChaseState);
         }
     }

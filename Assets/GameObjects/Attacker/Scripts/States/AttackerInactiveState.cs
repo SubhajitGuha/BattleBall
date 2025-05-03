@@ -7,14 +7,14 @@ public class AttackerInactiveState : AttackerBaseState
     public override void EnterState(AttackerStateManager attacker)
     {
         m_timer = 0.0f;
-        attacker.IsActive = false; //set the Attacker to not active
+        attacker.isActive = false; //set the Attacker to not active
 
         Renderer renderer = attacker.gameObject.GetComponent<Renderer>();
         //save the old material so that it can be switched later
         m_oldMaterial = renderer.material;
         //on Inactive state switch to the inactive material
-        if (attacker.InactiveMaterial != null)
-            renderer.material = attacker.InactiveMaterial;
+        if (attacker.inactiveMaterial != null)
+            renderer.material = attacker.inactiveMaterial;
         else
         {
             Debug.Log("Inactive Material Not Assigned To Attacker");
@@ -24,7 +24,7 @@ public class AttackerInactiveState : AttackerBaseState
     public override void UpdateState(AttackerStateManager attacker)
     {
         m_timer += Time.deltaTime;
-        if (m_timer >= attacker.CurrentTimer)
+        if (m_timer >= attacker.currentTimer)
         {
             //switch to old material and change the state to chase the ball
             attacker.gameObject.GetComponent<Renderer>().material = m_oldMaterial;

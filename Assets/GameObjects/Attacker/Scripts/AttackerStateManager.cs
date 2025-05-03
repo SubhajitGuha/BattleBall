@@ -1,11 +1,13 @@
 using System;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class AttackerStateManager : MonoBehaviour
 {
-    public Material InactiveMaterial;
-    [NonSerialized] public float CurrentTimer = 0.0f;
-    [NonSerialized] public bool IsActive;
+    public Material inactiveMaterial;
+    [NonSerialized] public Animator animationController;
+    [NonSerialized] public float currentTimer = 0.0f;
+    [NonSerialized] public bool isActive;
 
     private AttackerBaseState m_currentState;
     //different states of attacker
@@ -17,8 +19,11 @@ public class AttackerStateManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        IsActive = true;
-        CurrentTimer = AttackerVariables.SpawnTime;
+        animationController = GetComponent<Animator>();
+        animationController.SetBool("onSpawn", true);
+
+        isActive = true;
+        currentTimer = AttackerVariables.SpawnTime;
         m_currentState = m_attackerInactiveState;
         m_currentState.EnterState(this);
     }

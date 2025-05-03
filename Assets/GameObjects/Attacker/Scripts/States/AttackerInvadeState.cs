@@ -7,7 +7,7 @@ public class AttackerInvadeState : AttackerBaseState
     private Vector3 moveDirection;
     public override void EnterState(AttackerStateManager attacker)
     {
-        attacker.IsActive = true;
+        attacker.isActive = true;
         m_defenderFence = GameObject.FindGameObjectWithTag("DefenderFence");
         moveDirection = (m_defenderFence.transform.position - attacker.transform.position).normalized;
     }

@@ -2,7 +2,11 @@ using UnityEngine;
 
 public class MyUtils
 {
-   public static Vector3 TranslateOnXZPlane(in Vector3 currentPosition, in Vector3 targetPosition, float step)
+    public const string ATTACKER_WIN_COUNT = "AttackerWinCount";
+    public const string DEFENDER_WIN_COUNT = "DefenderWinCount";
+    public const string MATCH_COUNT = "MatchCount";
+
+    public static Vector3 TranslateOnXZPlane(in Vector3 currentPosition, in Vector3 targetPosition, float step)
     {
         Vector2 currentPosition2d = new Vector2(currentPosition.x, currentPosition.z); //taking only the xz values
         Vector2 targetPosition2d = new Vector2(targetPosition.x, targetPosition.z);

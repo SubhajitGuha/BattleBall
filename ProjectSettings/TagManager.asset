@@ -11,6 +11,7 @@ TagManager:
   - DefenderGate
   - DefenderFence
   - Arena
+  - Defender
   layers:
   - Default
   - TransparentFX

@@ -11,7 +11,7 @@ public class AttackerHoldingBallState : AttackerBaseState
     private bool m_isBallClose; //variable that determines whether the ball is close to the attacker or not
     public override void EnterState(AttackerStateManager attacker)
     {
-        attacker.IsActive = true;
+        attacker.isActive = true;
         m_isBallClose = false;
         m_ball = GameObject.FindGameObjectWithTag("Ball");
         m_defenderGate = GameObject.FindGameObjectWithTag("DefenderGate");
@@ -81,7 +81,7 @@ public class AttackerHoldingBallState : AttackerBaseState
             //get the script attached to this gameobject
             AttackerStateManager otherAttacker = gameObjects[i].GetComponent<AttackerStateManager>();
             //if not active move to next attacker
-           if (fromAttacker == otherAttacker || !otherAttacker.IsActive)
+           if (fromAttacker == otherAttacker || !otherAttacker.isActive)
                continue;
 
            float dist = Vector3.Distance(gameObjects[i].transform.position, fromAttacker.transform.position);
@@ -105,6 +105,7 @@ public class AttackerHoldingBallState : AttackerBaseState
         if (collider.gameObject == m_defenderGate)
         {
             //game over Attacker wins
+            GameManager.instance.AttackerWins();
             Debug.Log("Attacker wins");
             return;
         }
@@ -118,6 +119,7 @@ public class AttackerHoldingBallState : AttackerBaseState
             if (nearestAttacker == null)
             {
                 //Game over Defender wins
+                GameManager.instance.DefenderWins();
                 Debug.Log("game over, defender wins");
                 return;
             }
@@ -127,7 +129,7 @@ public class AttackerHoldingBallState : AttackerBaseState
                 m_ball.transform.SetParent(nearestAttacker.transform, true);
                 nearestAttacker.SwitchState(nearestAttacker.m_attackerHoldingBallState);
             }
-            attacker.CurrentTimer = AttackerVariables.ReactivateTime;
+            attacker.currentTimer = AttackerVariables.ReactivateTime;
             attacker.SwitchState(attacker.m_attackerInactiveState);
         }
 

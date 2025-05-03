@@ -7,7 +7,7 @@ public class AttackerChaseBallState : AttackerBaseState
     private GameObject m_ball;
     public override void EnterState(AttackerStateManager attacker)
     {
-        attacker.IsActive = true;
+        attacker.isActive = true;
         //get the ball from the scene
         m_ball = GameObject.FindGameObjectWithTag("Ball");
         if(m_ball == null )
@@ -20,7 +20,8 @@ public class AttackerChaseBallState : AttackerBaseState
     public override void UpdateState(AttackerStateManager attacker)
     {
         //if not holding the ball and if not chaising the ball switch to invade state
-        if ((m_ball.transform.parent != null && m_ball.transform.parent.gameObject != attacker) && AttackerVariables.isBallOccupied)
+        if ((m_ball.transform.parent != null && m_ball.transform.parent.gameObject != attacker)
+            && GameManager.instance.isBallOccupied)
         {
             attacker.SwitchState(attacker.m_attackerInvadeState);
             return;
@@ -40,9 +41,9 @@ public class AttackerChaseBallState : AttackerBaseState
     public override void OnCollisionEnter(AttackerStateManager attacker, Collider collider)
     {
         //If attacker hits the ball, acquire the ball and switch to holding ball state
-        if (!AttackerVariables.isBallOccupied && collider.gameObject == m_ball)
+        if (!GameManager.instance.isBallOccupied && collider.gameObject == m_ball)
         {
-            AttackerVariables.isBallOccupied = true;
+            GameManager.instance.isBallOccupied = true;
             Vector3 ballMoveLocation = attacker.transform.position + attacker.transform.forward * 1.0f;
             m_ball.transform.SetParent(attacker.transform, true);
             m_ball.transform.position = new Vector3(ballMoveLocation.x, 0.0f, ballMoveLocation.z);

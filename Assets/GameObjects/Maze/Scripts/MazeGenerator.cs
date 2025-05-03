@@ -31,7 +31,7 @@ public class MazeGenerator : MonoBehaviour
         public Vector2Int top;
         public Vector2Int bottom;
     };
-    public static Graph[,] MazeGraph;//Adjacency list of our maze graph, this is used traverse the graph
+    public static Graph[,] mazeGraph;//Adjacency list of our maze graph, this is used traverse the graph
 
     private void initilizeGraph(ref Graph graph)
     {
@@ -52,7 +52,7 @@ public class MazeGenerator : MonoBehaviour
         m_directions[2] = new Vector2Int(0, 1);
         m_directions[3] = new Vector2Int(0,-1);
         m_mazeChunks = new MazeChunk[m_width,m_height];
-        MazeGraph = new Graph[m_width,m_height];
+        mazeGraph = new Graph[m_width,m_height];
         m_visited = new bool[m_width,m_height];
 
         Vector3 generatorPos = transform.position;
@@ -61,8 +61,8 @@ public class MazeGenerator : MonoBehaviour
             for(int j=0;j<m_height;j+=m_spacing)
             {
                 m_visited[i,j] = false; //make every node to be not visited
-                initilizeGraph(ref MazeGraph[i,j]);
-                var gameObject = Instantiate(m_maze.gameObject, new Vector3(i + generatorPos.x, 0, j + generatorPos.z), Quaternion.identity);
+                initilizeGraph(ref mazeGraph[i,j]);
+                var gameObject = Instantiate(m_maze.gameObject, new Vector3(i + generatorPos.x, generatorPos.y, j + generatorPos.z), Quaternion.identity);
                 m_mazeChunks[i,j] = gameObject.GetComponent<MazeChunk>();
             }
         }
@@ -92,29 +92,29 @@ public class MazeGenerator : MonoBehaviour
         {
             prevChunk.RemoveLeftWall();
             m_mazeChunks[i,j].RemoveRightWall();
-            MazeGraph[i_prev, j_prev].left = new Vector2Int(i,j); //connect the previous node to next node
-            MazeGraph[i, j].right = new Vector2Int(i_prev, j_prev);
+            mazeGraph[i_prev, j_prev].left = new Vector2Int(i,j); //connect the previous node to next node
+            mazeGraph[i, j].right = new Vector2Int(i_prev, j_prev);
         }
         if (moveDirection.x == 1) //moving right from the prev chunk
         {
             prevChunk.RemoveRightWall();
             m_mazeChunks[i, j].RemoveLeftWall();
-            MazeGraph[i_prev, j_prev].right = new Vector2Int(i, j);
-            MazeGraph[i, j].left = new Vector2Int(i_prev, j_prev);
+            mazeGraph[i_prev, j_prev].right = new Vector2Int(i, j);
+            mazeGraph[i, j].left = new Vector2Int(i_prev, j_prev);
         }
         if (moveDirection.y == -1) //moving bottom from the prev chunk
         {
             prevChunk.RemoveBottomWall();
             m_mazeChunks[i, j].RemoveTopWall();
-            MazeGraph[i_prev, j_prev].bottom = new Vector2Int(i, j);
-            MazeGraph[i, j].top = new Vector2Int(i_prev, j_prev);
+            mazeGraph[i_prev, j_prev].bottom = new Vector2Int(i, j);
+            mazeGraph[i, j].top = new Vector2Int(i_prev, j_prev);
         }
         if (moveDirection.y == 1) //moving up from the prev chunk
         {
             prevChunk.RemoveTopWall();
             m_mazeChunks[i, j].RemoveBottomWall();
-            MazeGraph[i_prev, j_prev].top = new Vector2Int(i, j);
-            MazeGraph[i, j].bottom = new Vector2Int(i_prev, j_prev);
+            mazeGraph[i_prev, j_prev].top = new Vector2Int(i, j);
+            mazeGraph[i, j].bottom = new Vector2Int(i_prev, j_prev);
         }
     }
     public void dfs(int i, int j, in MazeChunk prevChunk, in Vector2Int moveDirection)
