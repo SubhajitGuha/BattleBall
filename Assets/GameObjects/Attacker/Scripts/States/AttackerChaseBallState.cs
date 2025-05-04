@@ -14,6 +14,7 @@ public class AttackerChaseBallState : AttackerBaseState
         {
             Debug.Log("palce the ball object on the level");
         }
+
     }
 
     //move towards the ball at normal speed 
@@ -30,7 +31,7 @@ public class AttackerChaseBallState : AttackerBaseState
         Vector3 currentPos = attacker.transform.position;
         float step = AttackerVariables.NormalSpeed * Time.deltaTime;
         attacker.transform.position = MyUtils.TranslateOnXZPlane(currentPos, m_ball.transform.position, step);
-        attacker.transform.forward = MyUtils.GetDirectionInXZPlane(currentPos, m_ball.transform.position);
+        attacker.transform.LookAt(m_ball.transform.position);
     }
 
     public override void ExitState(AttackerStateManager attacker)

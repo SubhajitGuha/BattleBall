@@ -1,3 +1,4 @@
+using Unity.XR.CoreUtils;
 using UnityEngine;
 
 public class AttackerInactiveState : AttackerBaseState
@@ -9,7 +10,7 @@ public class AttackerInactiveState : AttackerBaseState
         m_timer = 0.0f;
         attacker.isActive = false; //set the Attacker to not active
 
-        Renderer renderer = attacker.gameObject.GetComponent<Renderer>();
+        Renderer renderer = attacker.attackerBody.GetComponent<Renderer>();
         //save the old material so that it can be switched later
         m_oldMaterial = renderer.material;
         //on Inactive state switch to the inactive material
@@ -27,7 +28,7 @@ public class AttackerInactiveState : AttackerBaseState
         if (m_timer >= attacker.currentTimer)
         {
             //switch to old material and change the state to chase the ball
-            attacker.gameObject.GetComponent<Renderer>().material = m_oldMaterial;
+            attacker.attackerBody.GetComponent<Renderer>().material = m_oldMaterial;
             attacker.SwitchState(attacker.m_attackerChaseBallState);
         }
     }

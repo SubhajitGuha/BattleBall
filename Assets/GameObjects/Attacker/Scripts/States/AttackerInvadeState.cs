@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using Unity.XR.CoreUtils;
 using UnityEngine;
 
@@ -5,15 +6,19 @@ public class AttackerInvadeState : AttackerBaseState
 {
     private GameObject m_defenderFence;
     private Vector3 moveDirection;
+    private bool hasCollidedWithFence = false;
     public override void EnterState(AttackerStateManager attacker)
     {
         attacker.isActive = true;
+        hasCollidedWithFence = false;
         m_defenderFence = GameObject.FindGameObjectWithTag("DefenderFence");
         moveDirection = (m_defenderFence.transform.position - attacker.transform.position).normalized;
     }
 
     public override void UpdateState(AttackerStateManager attacker)
     {
+        if(hasCollidedWithFence)
+            return;
         //Vector3 currentPos = attacker.transform.position;
         Vector3 changeAxis = new Vector3(0.0f, 0.0f, 1.0f * Mathf.Sign(moveDirection.z)); //do not change the xy-axis
         attacker.transform.position += (changeAxis) * AttackerVariables.NormalSpeed * Time.deltaTime;
@@ -29,7 +34,8 @@ public class AttackerInvadeState : AttackerBaseState
     {
         if(collider.CompareTag("DefenderFence"))
         {
-            Object.Destroy(attacker.gameObject);
+            hasCollidedWithFence = true;
+            Object.Destroy(attacker.gameObject, 1.0f);
         }
     }
 }

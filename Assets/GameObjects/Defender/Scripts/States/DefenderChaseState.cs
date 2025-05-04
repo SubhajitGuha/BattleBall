@@ -16,6 +16,9 @@ public class DefenderChaseState : DefenderBaseState
             defender.transform.position,
             defender.attackerToChase.transform.position,
             step);
+        defender.transform.forward = MyUtils.GetDirectionInXZPlane(
+            defender.transform.position,
+            defender.attackerToChase.transform.position);
 
         if (Vector3.Distance(defender.transform.position, defender.attackerToChase.transform.position) <= 0.5f)
         {

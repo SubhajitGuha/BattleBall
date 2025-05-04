@@ -1,11 +1,15 @@
 using System;
+using System.Collections;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class AttackerStateManager : MonoBehaviour
 {
     public Material inactiveMaterial;
-    [NonSerialized] public Animator animationController;
+    public Material attackerHoldingBallMaterial;
+
+    public GameObject attackerBody;
+    [NonSerialized] private Animator animationController;
     [NonSerialized] public float currentTimer = 0.0f;
     [NonSerialized] public bool isActive;
 
@@ -19,13 +23,25 @@ public class AttackerStateManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        animationController = GetComponent<Animator>();
+        if(attackerBody == null)
+        {
+            Debug.LogError(string.Format("attach attacker body in {}", this.ToString()));
+        }
+        animationController = attackerBody.GetComponent<Animator>();
         animationController.SetBool("onSpawn", true);
+
+        StartCoroutine (ChangeAnimState("onSpawn", false, 1.1f));
 
         isActive = true;
         currentTimer = AttackerVariables.SpawnTime;
         m_currentState = m_attackerInactiveState;
         m_currentState.EnterState(this);
+    }
+
+    IEnumerator ChangeAnimState(string varName, bool value, float delayTime)
+    {
+        yield return new WaitForSeconds(delayTime);
+        animationController.SetBool(varName, value);
     }
 
     // Update is called once per frame
@@ -34,13 +50,23 @@ public class AttackerStateManager : MonoBehaviour
         m_currentState.UpdateState(this);
     }
 
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    m_currentState.OnCollisionEnter(this, other);
-    //}
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Defender"))
+        {
+            animationController.SetBool("onCollide", true);
+            StartCoroutine(ChangeAnimState("onCollide", false, 0.5f));
+        }
+    }
 
     private void OnTriggerStay(Collider other)
     {
+        //handle animation
+        if (other.CompareTag("DefenderFence"))
+        {
+            animationController.SetBool("onDestroy", true);
+            StartCoroutine(ChangeAnimState("onDestroy", false, 1.1f));
+        }
         m_currentState.OnCollisionEnter(this, other);
     }
 

@@ -9,7 +9,7 @@ public class DefenderInactiveState : DefenderBaseState
     public override void EnterState(DefenderStateManager defender)
     {
         m_timer = 0.0f;
-        Renderer renderer = defender.gameObject.GetNamedChild("DefenderBody").GetComponent<Renderer>();
+        Renderer renderer = defender.defenderBody.GetComponent<Renderer>();
         //save the old material so that it can be switched later
         m_oldMaterial = renderer.material;
         //on Inactive state switch to the inactive material
@@ -28,7 +28,7 @@ public class DefenderInactiveState : DefenderBaseState
         if(Vector3.Distance(defender.transform.position, defender.defenderOriginalPosition) <= 0.01f && m_timer >= defender.currentTimer)
         {
             //switch to old material
-            defender.gameObject.GetNamedChild("DefenderBody").GetComponent<Renderer>().material = m_oldMaterial;
+            defender.defenderBody.GetComponent<Renderer>().material = m_oldMaterial;
             defender.SwitchState(defender.m_defenderStandbyState);
             return;
         }

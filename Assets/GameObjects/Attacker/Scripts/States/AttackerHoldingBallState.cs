@@ -9,6 +9,7 @@ public class AttackerHoldingBallState : AttackerBaseState
     private GameObject m_ball = null;
     private GameObject m_defenderGate;
     private bool m_isBallClose; //variable that determines whether the ball is close to the attacker or not
+    private Material m_oldMaterial;
     public override void EnterState(AttackerStateManager attacker)
     {
         attacker.isActive = true;
@@ -23,6 +24,15 @@ public class AttackerHoldingBallState : AttackerBaseState
         {
             Debug.Log("palce the gate object on the level");
         }
+
+        if(attacker.attackerHoldingBallMaterial == null)
+        {
+            Debug.Log(string.Format("assign holding ball material to {}", attacker.ToString()));
+        }
+        //change the material when holding the ball
+        var renderer = attacker.attackerBody.GetComponent<Renderer>();
+        m_oldMaterial = renderer.material;
+        renderer.material = attacker.attackerHoldingBallMaterial;
     }
 
     public override void UpdateState(AttackerStateManager attacker)
@@ -60,7 +70,7 @@ public class AttackerHoldingBallState : AttackerBaseState
                 step);
 
             attacker.transform.forward = MyUtils.GetDirectionInXZPlane(
-                currentPos,
+                attacker.transform.position,
                 m_defenderGate.transform.position);
         }
     }
@@ -129,6 +139,10 @@ public class AttackerHoldingBallState : AttackerBaseState
                 m_ball.transform.SetParent(nearestAttacker.transform, true);
                 nearestAttacker.SwitchState(nearestAttacker.m_attackerHoldingBallState);
             }
+
+            //reassign the old material
+            var renderer = attacker.attackerBody.GetComponent<Renderer>();
+            renderer.material = m_oldMaterial;
             attacker.currentTimer = AttackerVariables.ReactivateTime;
             attacker.SwitchState(attacker.m_attackerInactiveState);
         }

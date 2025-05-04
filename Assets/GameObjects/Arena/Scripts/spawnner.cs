@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class Spawnner : MonoBehaviour
@@ -12,7 +13,8 @@ public class Spawnner : MonoBehaviour
 
     private Bounds m_attackerSpawnBounds;
 
-    private Vector3 m_boundsOffset = new Vector3(10,0,10);
+    private Vector3 m_boundsOffset = new Vector3(0.5f,0,0.5f);
+    private System.Random rand;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -23,6 +25,7 @@ public class Spawnner : MonoBehaviour
         m_attackerSpawnBounds.max -= m_boundsOffset;
         m_attackerSpawnBounds.min += m_boundsOffset;
 
+        UnityEngine.Random.InitState((int)DateTime.Now.Ticks);
         spawnBall();
     }
 

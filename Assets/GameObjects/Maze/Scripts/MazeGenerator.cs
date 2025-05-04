@@ -70,6 +70,7 @@ public class MazeGenerator : MonoBehaviour
         //do depth first serch (in random order)
         dfs(0, 0, null, new Vector2Int(0,0));
 
+        UnityEngine.Random.InitState((int)DateTime.Now.Ticks);
         //choose a random rechable pos
         Vector2Int m_ballPosition = m_ballPositions[UnityEngine.Random.Range(0,m_ballPositions.Count)]; 
 
