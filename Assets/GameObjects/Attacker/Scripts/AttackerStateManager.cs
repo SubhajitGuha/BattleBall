@@ -62,7 +62,7 @@ public class AttackerStateManager : MonoBehaviour
     private void OnTriggerStay(Collider other)
     {
         //handle animation
-        if (other.CompareTag("DefenderFence"))
+        if (other.CompareTag("DefenderFence") && !isActive)
         {
             animationController.SetBool("onDestroy", true);
             StartCoroutine(ChangeAnimState("onDestroy", false, 1.1f));

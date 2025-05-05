@@ -35,6 +35,7 @@ public class AttackerInvadeState : AttackerBaseState
         if(collider.CompareTag("DefenderFence"))
         {
             hasCollidedWithFence = true;
+            attacker.isActive = false; //make it inactive
             Object.Destroy(attacker.gameObject, 1.0f);
         }
     }

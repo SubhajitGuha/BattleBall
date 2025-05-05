@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private int m_numberOfMatches = 5;
     [SerializeField] private float m_timeLimit = 140.0f; //in seconds
-    [SerializeField] static private int m_energyPoints = 6;
+    [SerializeField] private int m_energyPoints = 6;
     private float m_attackerEnergy = 0.0f;
     private float m_defenderEnergy = 0.0f;
 
@@ -92,7 +92,7 @@ public class GameManager : MonoBehaviour
 
     public static int GetNumEnergyPoints()
     {
-        return m_energyPoints;
+        return instance.m_energyPoints;
     }
 
     public bool IsGamePaused()
@@ -168,8 +168,8 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.LoadScene("Maze", LoadSceneMode.Single);
     }
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+    private void Awake()
     {
         if(instance == null)
         {
@@ -179,6 +179,10 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this);
         }
+    }
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
         m_matchOverScreen.Deactivate();
         m_gameOverScreen.Deactivate();
         m_gameTimer = 0.0f;
