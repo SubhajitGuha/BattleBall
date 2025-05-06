@@ -48,7 +48,10 @@ public class ArRayCast : MonoBehaviour
             Touch touchZero = Input.GetTouch(0);
             Touch touchOne = Input.GetTouch(1);
 
-            if(touchOne.phase == TouchPhase.Began || touchZero.phase == TouchPhase.Began)
+            if(touchOne.phase == TouchPhase.Began ||
+                    touchZero.phase == TouchPhase.Began ||
+                    touchZero.phase == TouchPhase.Canceled ||
+                    touchOne.phase == TouchPhase.Canceled)
             {
                 m_initialScale = m_spawnObject.transform.lossyScale;
             }
@@ -61,8 +64,8 @@ public class ArRayCast : MonoBehaviour
                 float curMag = (touchZero.position - touchOne.position).magnitude;
 
                 float factor = curMag / prevMag;
-                if (factor < 0.01f)
-                    return;
+                //if (factor < 0.01f)
+                //    return;
                 scale(factor);
             }
         }

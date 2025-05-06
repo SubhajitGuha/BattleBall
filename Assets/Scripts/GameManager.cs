@@ -1,10 +1,7 @@
 using System;
 using System.Collections;
-using System.Threading.Tasks;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.XR.ARFoundation;
 
 public class GameManager : MonoBehaviour
 {

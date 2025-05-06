@@ -38,6 +38,8 @@ public class CameraController : MonoBehaviour
                 float diff = curMag - prevMag;
 
                 m_Camera.orthographicSize -= diff * m_zoomSpeed;
+                m_Camera.orthographicSize = Mathf.Clamp(m_Camera.orthographicSize, m_minOrthographicSize, m_maxOrthographicSize);
+
             }
         }
         //else

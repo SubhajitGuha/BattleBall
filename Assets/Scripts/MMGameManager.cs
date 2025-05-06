@@ -17,6 +17,10 @@ public class MmGamemanager : MonoBehaviour
         SceneManager.LoadScene("Main", LoadSceneMode.Single);
     }
 
+    public void PlayTieBreaker()
+    {
+        SceneManager.LoadScene("Maze", LoadSceneMode.Single);
+    }
     public void Quit()
     {
         Application.Quit();
