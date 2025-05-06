@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class DefenderInactiveState : DefenderBaseState
 {
+    const float minCompareDist = 0.01f;
     private float m_timer;
     private Material m_oldMaterial;
     public override void EnterState(DefenderStateManager defender)
     {
+        defender.isActive = false;
         m_timer = 0.0f;
         Renderer renderer = defender.defenderBody.GetComponent<Renderer>();
         //save the old material so that it can be switched later
@@ -25,7 +27,11 @@ public class DefenderInactiveState : DefenderBaseState
     {
         m_timer += Time.deltaTime;
         //stay inactive until the timer runs out and until we reach the old position
-        if(Vector3.Distance(defender.transform.position, defender.defenderOriginalPosition) <= 0.01f && m_timer >= defender.currentTimer)
+        if (
+            Vector3.Distance(defender.transform.position, defender.defenderOriginalPosition)
+            <= minCompareDist * MyUtils.FieldScale && m_timer
+            >= defender.currentTimer
+            )
         {
             //switch to old material
             defender.defenderBody.GetComponent<Renderer>().material = m_oldMaterial;

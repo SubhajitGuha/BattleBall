@@ -19,10 +19,12 @@ public class AttackerInvadeState : AttackerBaseState
     {
         if(hasCollidedWithFence)
             return;
-        //Vector3 currentPos = attacker.transform.position;
-        Vector3 changeAxis = new Vector3(0.0f, 0.0f, 1.0f * Mathf.Sign(moveDirection.z)); //do not change the xy-axis
-        attacker.transform.position += (changeAxis) * AttackerVariables.NormalSpeed * Time.deltaTime;
-        attacker.transform.forward = (changeAxis);
+
+        //move the attacker only in z-axis (in order to move straight)
+        Vector3 moveDirZ = new Vector3(0.0f, 0.0f, 1.0f * Mathf.Sign(moveDirection.z) * MyUtils.FieldScale); //do not change the xy-axis
+
+        attacker.transform.position += (moveDirZ) * AttackerVariables.NormalSpeed * Time.deltaTime;
+        attacker.transform.forward = (moveDirZ);
     }
 
     public override void ExitState(AttackerStateManager state)

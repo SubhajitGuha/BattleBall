@@ -18,12 +18,31 @@ public class CameraController : MonoBehaviour
     {
         if (m_Camera.orthographic)
         {
-            m_Camera.orthographicSize -= Input.GetAxis("Mouse ScrollWheel") * m_zoomSpeed;
-            m_Camera.orthographicSize = Mathf.Clamp(m_Camera.orthographicSize, m_minOrthographicSize, m_maxOrthographicSize);
+            if (Input.mouseScrollDelta.x != 0.0 || Input.mouseScrollDelta.y != 0.0)
+            {
+                m_Camera.orthographicSize -= Input.GetAxis("Mouse ScrollWheel") * m_zoomSpeed;
+                m_Camera.orthographicSize = Mathf.Clamp(m_Camera.orthographicSize, m_minOrthographicSize, m_maxOrthographicSize);
+            }
+            //for touch input
+            if(Input.touchCount == 2)
+            {
+                Touch touchZero = Input.GetTouch(0);
+                Touch touchOne = Input.GetTouch(1);
+
+                Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
+                Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
+
+                float prevMag = (touchZeroPrevPos -  touchOnePrevPos).magnitude;
+                float curMag = (touchZero.position - touchOne.position).magnitude;
+
+                float diff = curMag - prevMag;
+
+                m_Camera.orthographicSize -= diff * m_zoomSpeed;
+            }
         }
-        else
-        {
-            m_Camera.fieldOfView -= Input.GetAxis("Mouse ScrollWheel") * m_zoomSpeed;
-        }
+        //else
+        //{
+        //    m_Camera.fieldOfView -= Input.GetAxis("Mouse ScrollWheel") * m_zoomSpeed;
+        //}
     }
 }

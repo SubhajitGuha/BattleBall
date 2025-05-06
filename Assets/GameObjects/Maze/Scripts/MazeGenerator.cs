@@ -41,6 +41,10 @@ public class MazeGenerator : MonoBehaviour
         graph.bottom = new Vector2Int(-1, -1);
     }
 
+    private void Awake()
+    {
+        MyUtils.FieldScale = 1.0f;
+    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -56,13 +60,19 @@ public class MazeGenerator : MonoBehaviour
         m_visited = new bool[m_width,m_height];
 
         Vector3 generatorPos = transform.position;
+        MyUtils.GameYValue = generatorPos.y; //set the game Y value
+
         for(int i=0;i<m_width;i+=m_spacing)
         {
             for(int j=0;j<m_height;j+=m_spacing)
             {
                 m_visited[i,j] = false; //make every node to be not visited
                 initilizeGraph(ref mazeGraph[i,j]);
-                var gameObject = Instantiate(m_maze.gameObject, new Vector3(i + generatorPos.x, generatorPos.y, j + generatorPos.z), Quaternion.identity);
+
+                var gameObject = Instantiate(m_maze.gameObject,
+                    MyUtils.CreateVecOnXZPlane(i + generatorPos.x, j + generatorPos.z),
+                    Quaternion.identity);
+
                 m_mazeChunks[i,j] = gameObject.GetComponent<MazeChunk>();
             }
         }
@@ -74,10 +84,14 @@ public class MazeGenerator : MonoBehaviour
         //choose a random rechable pos
         Vector2Int m_ballPosition = m_ballPositions[UnityEngine.Random.Range(0,m_ballPositions.Count)]; 
 
-        //place the ball at a random valid locationin the maze
-        Instantiate(m_ball, new Vector3(m_ballPosition.x + generatorPos.x, 0, m_ballPosition.y + generatorPos.z), Quaternion.identity);
+        //place the ball at a random valid locations the maze
+        Instantiate(
+            m_ball,
+            MyUtils.CreateVecOnXZPlane(m_ballPosition.x + generatorPos.x, m_ballPosition.y + generatorPos.z),
+            Quaternion.identity
+            );
         //spawn the attacker at starting position
-        Instantiate(m_attacker, new Vector3(generatorPos.x, 0, generatorPos.z), Quaternion.identity);
+        Instantiate(m_attacker, MyUtils.CreateVecOnXZPlane(generatorPos.x, generatorPos.z), Quaternion.identity);
     }
 
     private void removeWalls(int i, int j, in MazeChunk prevChunk, in Vector2Int moveDirection)

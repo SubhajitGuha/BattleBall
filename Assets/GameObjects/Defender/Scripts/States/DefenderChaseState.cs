@@ -2,8 +2,10 @@ using UnityEngine;
 
 public class DefenderChaseState : DefenderBaseState
 {
+    const float minCollisionDistance = 0.8f;
     public override void EnterState(DefenderStateManager defender)
     {
+        defender.isActive = true;
 
     }
 
@@ -20,7 +22,7 @@ public class DefenderChaseState : DefenderBaseState
             defender.transform.position,
             defender.attackerToChase.transform.position);
 
-        if (Vector3.Distance(defender.transform.position, defender.attackerToChase.transform.position) <= 0.5f)
+        if (Vector3.Distance(defender.transform.position, defender.attackerToChase.transform.position) <= minCollisionDistance * MyUtils.FieldScale)
         {
             defender.currentTimer = DefenderVariables.ReactivateTime;
             defender.SwitchState(defender.m_defenderInactiveState);
@@ -34,6 +36,13 @@ public class DefenderChaseState : DefenderBaseState
 
     public override void OnCollisionEnter(DefenderStateManager defender, Collider collider)
     {
-       
+        //var ballObj = GameObject.FindGameObjectWithTag("Ball");
+        //var parent = ballObj.transform.parent;
+        //AttackerStateManager attacker = parent.GetComponent<AttackerStateManager>(); //attacker holding the ball
+        //if (collider.gameObject == attacker.gameObject && attacker.isActive)
+        //{
+        //    defender.currentTimer = DefenderVariables.ReactivateTime;
+        //    defender.SwitchState(defender.m_defenderInactiveState);
+        //}
     }
 }

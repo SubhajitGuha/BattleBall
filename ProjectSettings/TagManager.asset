@@ -12,6 +12,7 @@ TagManager:
   - DefenderFence
   - Arena
   - Defender
+  - ArenaRoot
   layers:
   - Default
   - TransparentFX
@@ -43,7 +44,7 @@ TagManager:
   - 
   - 
   - 
-  - 
+  - XR Simulation
   - 
   m_SortingLayers:
   - name: Default

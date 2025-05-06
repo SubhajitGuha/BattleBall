@@ -6,12 +6,16 @@ public class DefenderStandbyState : DefenderBaseState
     private GameObject m_arena;
     private GameObject m_scanCircle;
     private float m_senseRadius;
+    private float m_oldFieldScale;
     public override void EnterState(DefenderStateManager defender)
     {
+        defender.isActive = true;
+        m_oldFieldScale = MyUtils.FieldScale;
         //get the arena
         m_arena = GameObject.FindGameObjectWithTag("Arena");
         //calculate the chase radius (by default some % of the arena width)
         m_senseRadius = DefenderVariables.DetectionRange * m_arena.GetComponent<Renderer>().bounds.extents.x;
+
         //get the scan circle game object
         m_scanCircle = defender.gameObject.GetNamedChild("ScanCircle");
         m_scanCircle.GetComponent<MeshRenderer>().enabled = true;
@@ -20,7 +24,7 @@ public class DefenderStandbyState : DefenderBaseState
         m_scanCircle.gameObject.transform.localScale = new Vector3(
             m_senseRadius * 2.0f,
             m_senseRadius * 2.0f,
-            m_senseRadius * 2.0f);
+            m_senseRadius * 2.0f)/ MyUtils.FieldScale;
     }
 
     private AttackerStateManager getAttackerInRadius(in DefenderStateManager fromDefender)
@@ -33,7 +37,11 @@ public class DefenderStandbyState : DefenderBaseState
         }
 
         AttackerStateManager attackerHoldingBall = ballGameObject.transform.parent.GetComponent<AttackerStateManager>();
-        if(Vector3.Distance(attackerHoldingBall.transform.position,ballGameObject.transform.position) > 1.5)
+        if(attackerHoldingBall == null)
+        {
+            return null;
+        }
+        if(Vector3.Distance(attackerHoldingBall.transform.position,ballGameObject.transform.position) > 1.5 * MyUtils.FieldScale)
         {
             //attacker might be still receiving the ball so check for that and dont chase the attacker
             return null;
@@ -48,6 +56,14 @@ public class DefenderStandbyState : DefenderBaseState
 
     public override void UpdateState(DefenderStateManager defender)
     {
+        if(MyUtils.FieldScale != m_oldFieldScale) //scale has changed
+        {
+            m_senseRadius = DefenderVariables.DetectionRange * m_arena.GetComponent<Renderer>().bounds.extents.x;
+            m_scanCircle.gameObject.transform.localScale = new Vector3(
+            m_senseRadius * 2.0f,
+            m_senseRadius * 2.0f,
+            m_senseRadius * 2.0f) / MyUtils.FieldScale;
+        }
         AttackerStateManager attackerHoldingBall = getAttackerInRadius(defender);
         if (attackerHoldingBall != null)
         {

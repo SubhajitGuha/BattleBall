@@ -65,8 +65,7 @@ public class MazeGameManager : MonoBehaviour
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Awake()
     {
         if (instance == null)
         {
@@ -76,6 +75,10 @@ public class MazeGameManager : MonoBehaviour
         {
             Destroy(this);
         }
+    }
+    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    void Start()
+    {
         m_gameOverScreen.Deactivate();
         m_gameTimer = 0.0f;
         m_gamePaused = false;

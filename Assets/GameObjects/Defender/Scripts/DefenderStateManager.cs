@@ -6,11 +6,11 @@ public class DefenderStateManager : MonoBehaviour
 {
     public Material inactiveMaterial;
     public GameObject defenderBody;
-
     private Animator m_animator;
     [NonSerialized] public Vector3 defenderOriginalPosition; //this is the defender spawn position
     [NonSerialized] public float currentTimer = 0.0f;
     [NonSerialized] public GameObject attackerToChase;
+    [NonSerialized] public bool isActive;
 
     private DefenderBaseState m_currentState;
 
@@ -18,6 +18,10 @@ public class DefenderStateManager : MonoBehaviour
     public DefenderInactiveState m_defenderInactiveState = new DefenderInactiveState();
     public DefenderStandbyState m_defenderStandbyState = new DefenderStandbyState();
 
+    private void Awake()
+    {
+        isActive = false;
+    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

@@ -42,7 +42,7 @@ public class AttackerHoldingBallState : AttackerBaseState
         if (!m_isBallClose)
         {
             //this attacker is waiting to receive the ball
-            Vector3 ballMoveLocation = attacker.transform.position + attacker.transform.forward * 1.0f;
+            Vector3 ballMoveLocation = attacker.transform.position + attacker.transform.forward * 1.0f * MyUtils.FieldScale;
             float step = AttackerVariables.BallSpeed * Time.deltaTime;
             m_ball.transform.position = MyUtils.TranslateOnXZPlane(
                 m_ball.transform.position,
@@ -52,9 +52,9 @@ public class AttackerHoldingBallState : AttackerBaseState
             m_ball.transform.forward = MyUtils.GetDirectionInXZPlane(
                 m_ball.transform.position,
                 attacker.transform.position);
-            if (ballToAttackerDist <= 1.0f)
+            if (ballToAttackerDist <= 1.0f * MyUtils.FieldScale)
             {
-                m_ball.transform.position = new Vector3(ballMoveLocation.x, 0.0f, ballMoveLocation.z);
+                m_ball.transform.position = MyUtils.CreateVecOnXZPlane(ballMoveLocation.x, ballMoveLocation.z);
                 m_isBallClose = true;
             }
 
@@ -119,13 +119,14 @@ public class AttackerHoldingBallState : AttackerBaseState
             Debug.Log("Attacker wins");
             return;
         }
-        //if attacker collides with the defender then pass the ball to the nearest attacker
-        if(collider.gameObject.GetComponent<DefenderStateManager>() != null)
+        //if attacker collides with the defender and the defender is active then pass the ball to the nearest attacker
+        DefenderStateManager defender = collider.gameObject.GetComponent<DefenderStateManager>();
+        if (defender != null && defender.isActive)
         {
-            Debug.Log("Defender caught");
+            Debug.Log("Defender caught the attacker");
             //get nearest active attaker
             AttackerStateManager nearestAttacker = getNearestAttacker(attacker);
-            //if no attacker is found nearby game over defender won
+            //if no attacker is found nearby game over, defender won
             if (nearestAttacker == null)
             {
                 //Game over Defender wins

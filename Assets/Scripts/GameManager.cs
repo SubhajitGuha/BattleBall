@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -159,11 +161,24 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene("Main", LoadSceneMode.Single);
     }
 
+    IEnumerator UnLoadScene(Scene scene)
+    {
+        AsyncOperation ao = SceneManager.UnloadSceneAsync(scene);
+        yield return ao;
+    }
     public void MainMenuButton()
     {
+        Scene activeScene = SceneManager.GetActiveScene();
         SceneManager.LoadScene("MainMenu", LoadSceneMode.Single);
+        StartCoroutine(UnLoadScene(activeScene));
     }
 
+    public void ARButton()
+    {
+        Scene activeScene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene("AR_Main", LoadSceneMode.Single);
+        StartCoroutine(UnLoadScene(activeScene));
+    }
     public void TieBreakerMatchButton()
     {
         SceneManager.LoadScene("Maze", LoadSceneMode.Single);
@@ -217,7 +232,7 @@ public class GameManager : MonoBehaviour
         m_defenderEnergyBar.Activate(m_defenderEnergy / m_energyPoints); //render defender energy progress bar
 
         //game will end when we played "m_numberOfMatches" number of matches
-        if (m_currentMatch == m_numberOfMatches)
+        if (m_currentMatch >= m_numberOfMatches)
         {
             if (m_attackerWinCount > m_defenderWinCount)
             {
