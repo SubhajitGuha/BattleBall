@@ -13,6 +13,8 @@ public class ArTogglePlane : MonoBehaviour
 
     public void ToggleARPlaneVisibility()
     {
+        if(m_planeManager == null)
+            return;
         m_planeManager.enabled = !m_planeManager.enabled;
 
         if (m_planeManager.enabled)

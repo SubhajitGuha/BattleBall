@@ -82,12 +82,14 @@ public class Spawnner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(transform.parent == null)
+        Transform parent = gameObject.transform.parent;
+        if (parent == null)
         {
             Debug.LogError("attach a parent to the attacker with uniform scale");
+            return;
         }
-
-        MyUtils.FieldScale = transform.parent.lossyScale.x; //assuming there is uniform scale
+        MyUtils.GameYValue = parent.position.y; // set the game Y value
+        MyUtils.FieldScale = parent.lossyScale.x; //assuming there is uniform scale
 
         if (Input.GetMouseButtonDown(0) && !GameManager.instance.IsGamePaused())
         {

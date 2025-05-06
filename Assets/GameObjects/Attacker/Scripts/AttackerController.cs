@@ -11,6 +11,11 @@ public class AttackerController : MonoBehaviour
     private Vector2 m_startTouchPos;
     private Vector2 m_endTouchPos;
 
+    private void Awake()
+    {
+        m_startTouchPos = Vector2.zero;
+        m_endTouchPos = Vector2.zero;
+    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

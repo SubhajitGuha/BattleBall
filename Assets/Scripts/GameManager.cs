@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.XR.ARFoundation;
 
 public class GameManager : MonoBehaviour
 {
@@ -15,7 +16,11 @@ public class GameManager : MonoBehaviour
     [SerializeField] private UITimer m_timerScreen;
     [SerializeField] private UIEnergyBar m_attackerEnergyBar;
     [SerializeField] private UIEnergyBar m_defenderEnergyBar;
+    [SerializeField] private GameObject m_ARPrefab;
 
+    private Vector3 m_initialArenaPosition; //store the initial arena spawn position
+    private Vector3 m_initialArenaScale;
+    private Camera m_camera; //non AR camera
     enum GameState : byte
     {
         WIN,
@@ -49,12 +54,6 @@ public class GameManager : MonoBehaviour
     private int m_currentMatch = 0;
 
     [NonSerialized]public bool isBallOccupied; //defines whether any of the attacker occupies the ball
-
-    //private void initilize()
-    //{
-    //    m_gameTimer = 0.0f;
-    //    m_currentMatchState = MatchState.NONE;
-    //}
 
     //can call from other script
     public void AttackerWins()
@@ -175,10 +174,23 @@ public class GameManager : MonoBehaviour
 
     public void ARButton()
     {
-        Scene activeScene = SceneManager.GetActiveScene();
-        SceneManager.LoadScene("AR_Main", LoadSceneMode.Single);
-        StartCoroutine(UnLoadScene(activeScene));
+        if(m_ARPrefab.gameObject.activeInHierarchy)
+        {
+            var arenaTransform = GameObject.FindGameObjectWithTag("ArenaRoot").transform;
+            arenaTransform.position = m_initialArenaPosition;
+            arenaTransform.localScale = m_initialArenaScale;
+
+            m_camera.gameObject.SetActive(true);
+            m_ARPrefab.gameObject.SetActive(false);
+        }
+        else
+        {
+
+            m_camera.gameObject.SetActive(false);
+            m_ARPrefab.gameObject.SetActive(true);
+        }
     }
+
     public void TieBreakerMatchButton()
     {
         SceneManager.LoadScene("Maze", LoadSceneMode.Single);
@@ -194,6 +206,8 @@ public class GameManager : MonoBehaviour
         {
             Destroy(this);
         }
+
+        m_camera = FindFirstObjectByType<Camera>();
     }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -209,6 +223,9 @@ public class GameManager : MonoBehaviour
         m_currentMatch = PlayerPrefs.GetInt(MyUtils.MATCH_COUNT, 0);
         m_attackerWinCount = PlayerPrefs.GetInt(MyUtils.ATTACKER_WIN_COUNT, 0);
         m_defenderWinCount = PlayerPrefs.GetInt(MyUtils.DEFENDER_WIN_COUNT, 0);
+        var arenaTransform = GameObject.FindGameObjectWithTag("ArenaRoot").transform;
+        m_initialArenaPosition = arenaTransform.position;
+        m_initialArenaScale = arenaTransform.lossyScale;
     }
 
     // Update is called once per frame

@@ -25,6 +25,7 @@ public class ArRayCast : MonoBehaviour
     void Start()
     {
         m_raycastManager = FindFirstObjectByType<ARRaycastManager>();
+        m_spawnObject = GameObject.FindGameObjectWithTag("ArenaRoot");
     }
 
     void scale(float val)
@@ -69,15 +70,14 @@ public class ArRayCast : MonoBehaviour
         }
         if (EventSystem.current == null) 
             return;
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(1))
         { 
             // Debug.Log("Placement Method =>  Meshing");
             TouchToRayPlaneDetection(Input.mousePosition);
         }
 #if UNITY_IOS || UNITY_ANDROID
 
-        if (Input.touchCount > 0 && Input.touchCount < 2 &&
-                Input.GetTouch(0).phase == TouchPhase.Began)
+        if (Input.touchCount == 2 && Input.GetTouch(0).phase == TouchPhase.Began)
             {
                 Touch touch = Input.GetTouch(0);
                 
@@ -115,6 +115,9 @@ public class ArRayCast : MonoBehaviour
             {
                 m_spawnObject = Instantiate(m_prefabToPlace);
                 //m_spawnObject.transform.localScale = m_spawnObject.transform.lossyScale.Multiply(new Vector3(m_scale, m_scale, m_scale));
+            }
+            if(hits[0].trackable.gameObject.activeInHierarchy)
+            {
                 var forward = hits[0].pose.rotation * Vector3.up;
                 var offset = forward * k_PrefabHalfSize;
                 m_spawnObject.transform.position = hits[0].pose.position + offset;
