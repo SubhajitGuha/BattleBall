@@ -11,9 +11,11 @@ public class ArRayCast : MonoBehaviour
 
     private Camera m_camera;
     private ARRaycastManager m_raycastManager;
+    private ARPlaneManager m_planeManager;
     [SerializeField]private GameObject m_prefabToPlace;
     private float m_scalefactor = 1.0f;
     private Vector3 m_initialScale;
+    private float m_initialDist;
 
     private GameObject m_spawnObject;
     private void Awake()
@@ -25,6 +27,7 @@ public class ArRayCast : MonoBehaviour
     void Start()
     {
         m_raycastManager = FindFirstObjectByType<ARRaycastManager>();
+        m_planeManager = FindFirstObjectByType<ARPlaneManager>();
         m_spawnObject = GameObject.FindGameObjectWithTag("ArenaRoot");
     }
 
@@ -48,24 +51,30 @@ public class ArRayCast : MonoBehaviour
             Touch touchZero = Input.GetTouch(0);
             Touch touchOne = Input.GetTouch(1);
 
-            if(touchOne.phase == TouchPhase.Began ||
-                    touchZero.phase == TouchPhase.Began ||
-                    touchZero.phase == TouchPhase.Canceled ||
-                    touchOne.phase == TouchPhase.Canceled)
+            if (touchZero.phase == TouchPhase.Ended ||
+                touchZero.phase == TouchPhase.Canceled ||
+                touchOne.phase == TouchPhase.Ended ||
+                touchOne.phase == TouchPhase.Canceled)
             {
-                m_initialScale = m_spawnObject.transform.lossyScale;
+                return;
+            }
+            if (touchZero.phase == TouchPhase.Began ||
+                touchOne.phase == TouchPhase.Began)
+            {
+                m_initialDist = Vector2.Distance(touchZero.position, touchOne.position);
+                m_initialScale = m_spawnObject.transform.localScale;
             }
             else //touch moved
             {
-                Vector2 touchZeroPrevPos = touchZero.position - touchZero.deltaPosition;
-                Vector2 touchOnePrevPos = touchOne.position - touchOne.deltaPosition;
+                var curDistance = Vector2.Distance(touchZero.position, touchOne.position);
 
-                float prevMag = (touchZeroPrevPos - touchOnePrevPos).magnitude;
-                float curMag = (touchZero.position - touchOne.position).magnitude;
-
-                float factor = curMag / prevMag;
-                //if (factor < 0.01f)
-                //    return;
+                if(Mathf.Approximately(m_initialDist,0))
+                {
+                    return ;
+                }
+                    
+                float factor = curDistance / m_initialDist;
+                
                 scale(factor);
             }
         }
@@ -73,14 +82,14 @@ public class ArRayCast : MonoBehaviour
         }
         if (EventSystem.current == null) 
             return;
-        if (Input.GetMouseButtonDown(1))
+        if (Input.GetMouseButtonDown(0))
         { 
             // Debug.Log("Placement Method =>  Meshing");
             TouchToRayPlaneDetection(Input.mousePosition);
         }
 #if UNITY_IOS || UNITY_ANDROID
 
-        if (Input.touchCount == 2 && Input.GetTouch(0).phase == TouchPhase.Began)
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
             {
                 Touch touch = Input.GetTouch(0);
                 
@@ -117,10 +126,12 @@ public class ArRayCast : MonoBehaviour
             if(m_spawnObject == null)
             {
                 m_spawnObject = Instantiate(m_prefabToPlace);
+                Debug.Log("m_spawn is null");
                 //m_spawnObject.transform.localScale = m_spawnObject.transform.lossyScale.Multiply(new Vector3(m_scale, m_scale, m_scale));
             }
             if(hits[0].trackable.gameObject.activeInHierarchy)
             {
+                //m_spawnObject.SetActive(true);
                 var forward = hits[0].pose.rotation * Vector3.up;
                 var offset = forward * k_PrefabHalfSize;
                 m_spawnObject.transform.position = hits[0].pose.position + offset;

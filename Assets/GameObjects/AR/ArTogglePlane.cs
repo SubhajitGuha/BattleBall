@@ -13,6 +13,7 @@ public class ArTogglePlane : MonoBehaviour
 
     public void ToggleARPlaneVisibility()
     {
+#if UNITY_ANDROID||UNITY_IOS
         if(m_planeManager == null)
             return;
         m_planeManager.enabled = !m_planeManager.enabled;
@@ -25,7 +26,7 @@ public class ArTogglePlane : MonoBehaviour
         {
             SetAllPlanesActive(false);
         }
-
+#endif
     }
 
     void SetAllPlanesActive(bool value)

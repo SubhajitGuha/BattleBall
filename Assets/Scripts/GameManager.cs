@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     private Vector3 m_initialArenaPosition; //store the initial arena spawn position
     private Vector3 m_initialArenaScale;
     private Camera m_camera; //non AR camera
+    private GameObject m_arena;
     enum GameState : byte
     {
         WIN,
@@ -171,9 +172,10 @@ public class GameManager : MonoBehaviour
 
     public void ARButton()
     {
+#if UNITY_ANDROID || UNITY_IOS
         if(m_ARPrefab.gameObject.activeInHierarchy)
         {
-            var arenaTransform = GameObject.FindGameObjectWithTag("ArenaRoot").transform;
+            var arenaTransform = m_arena.transform;
             arenaTransform.position = m_initialArenaPosition;
             arenaTransform.localScale = m_initialArenaScale;
 
@@ -182,10 +184,14 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            var arenaTransform = m_arena.transform;
+            arenaTransform.localScale *= 0.2f;
+            //arenaTransform.gameObject.SetActive(false);
 
             m_camera.gameObject.SetActive(false);
             m_ARPrefab.gameObject.SetActive(true);
         }
+#endif
     }
 
     public void TieBreakerMatchButton()
@@ -220,7 +226,8 @@ public class GameManager : MonoBehaviour
         m_currentMatch = PlayerPrefs.GetInt(MyUtils.MATCH_COUNT, 0);
         m_attackerWinCount = PlayerPrefs.GetInt(MyUtils.ATTACKER_WIN_COUNT, 0);
         m_defenderWinCount = PlayerPrefs.GetInt(MyUtils.DEFENDER_WIN_COUNT, 0);
-        var arenaTransform = GameObject.FindGameObjectWithTag("ArenaRoot").transform;
+        m_arena = GameObject.FindGameObjectWithTag("ArenaRoot");
+        var arenaTransform = m_arena.transform;
         m_initialArenaPosition = arenaTransform.position;
         m_initialArenaScale = arenaTransform.lossyScale;
     }
